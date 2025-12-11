@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONAR_HOST_URL = 'http://sonarqube-server:9000'
-        SONAR_TOKEN    = 'sqa_73817cd26adf945445f16410d6c530a7cad42d2b'   // ❗better to use Jenkins credentials later
+        SONAR_TOKEN    = 'sqp_88eb03682b0d3a1749d1018618baee70a826b4bf'   // ❗better to use Jenkins credentials later
         SONAR_NETWORK  = 'sonarqube_sonarnet'
     }
 
@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/NassimeElkamari/nodejs-sonar.git'
+                    url: 'https://github.com/marwa-essanousy/DevSecOps.git'
             }
         }
 
@@ -23,7 +23,6 @@ pipeline {
 
         stage('Run tests with coverage') {
             steps {
-                // NODE_ENV=test so index.js doesn’t start the server
                 bat 'set NODE_ENV=test&& npm test'
             }
         }

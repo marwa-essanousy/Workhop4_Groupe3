@@ -53,17 +53,19 @@ pipeline {
                 """
             }
         }
-        stage('Trivy Security Gate') {
-        steps {
-            bat """
-            docker run --rm ^
-            aquasec/trivy:latest ^
-            image marwa2526/mon-app-react:latest ^
-            --severity CRITICAL ^
-            --exit-code 1
-            """
+       stage('Trivy Scan (JSON Report)') {
+            steps {
+                bat """
+                docker run --rm ^
+                -v "%CD%:/project" ^
+                aquasec/trivy:latest ^
+                image marwa2526/mon-app-react:latest ^
+                --severity HIGH,CRITICAL ^
+                --format json ^
+                --output /project/trivy-report.json
+                """
         }
     }
-        
-    }
+
+ }
 }

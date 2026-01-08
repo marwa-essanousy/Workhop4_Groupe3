@@ -29,18 +29,18 @@ pipeline {
             }
         }
 
-        stage('OWASP Dependency-Check') {
-            steps {
-                bat """
-                docker run --rm ^
-                  -v "%CD%:/src" ^
-                  owasp/dependency-check ^
-                  --scan /src ^
-                  --format HTML ^
-                  --out /src/dependency-check-report
-                """
-            }
-        }
+        // stage('OWASP Dependency-Check') {
+        //     steps {
+        //         bat """
+        //         docker run --rm ^
+        //           -v "%CD%:/src" ^
+        //           owasp/dependency-check ^
+        //           --scan /src ^
+        //           --format HTML ^
+        //           --out /src/dependency-check-report
+        //         """
+        //     }
+        // }
 
         stage('SonarCloud Analysis') {
             steps {
@@ -53,5 +53,17 @@ pipeline {
                 """
             }
         }
+        stage('Trivy Security Gate') {
+        steps {
+            bat """
+            docker run --rm ^
+            aquasec/trivy:latest ^
+            image marwa2526/mon-app-react:latest ^
+            --severity CRITICAL ^
+            --exit-code 1
+            """
+        }
+    }
+        
     }
 }
